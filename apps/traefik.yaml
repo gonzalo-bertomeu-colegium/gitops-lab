@@ -1,0 +1,27 @@
+# Ingress controller del cluster. Su Service es type: LoadBalancer y lo atiende
+# ServiceLB (el balanceador de k3s): publica los puertos 80 y 443 en el nodo.
+# Sync-wave -1: se sincroniza antes que las apps que publican Ingress.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://traefik.github.io/charts
+    chart: traefik
+    targetRevision: 42.1.3
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # Los CRDs de Traefik superan el límite de tamaño del client-side apply.
+      - ServerSideApply=true
