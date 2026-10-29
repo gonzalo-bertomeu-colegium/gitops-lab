@@ -1,0 +1,21 @@
+# App de ejemplo: ArgoCD aplica el kustomization de workloads/whoami.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: whoami
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/gonzalo-bertomeu-colegium/gitops-lab.git
+    targetRevision: main
+    path: workloads/whoami
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: whoami
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
