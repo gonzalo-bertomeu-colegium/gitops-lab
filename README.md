@@ -39,7 +39,9 @@ kubectl -n argocd get applications  # root y whoami
    (revisa Git cada 30s, o *Refresh* en la UI).
 2. Escalá el deployment a mano con `kubectl`: `selfHeal` lo devuelve a lo que dice Git.
 3. Agregá tu propia app: una carpeta en `workloads/` y su Application en `apps/`.
-4. Borrá `apps/whoami.yaml` y pusheá: `prune` elimina la app y sus recursos.
+4. Borrá `apps/whoami.yaml` y pusheá: `prune` elimina la Application, pero sus recursos quedan
+   huérfanos en el cluster salvo que la Application tenga el finalizer
+   `resources-finalizer.argocd.argoproj.io` (borrado en cascada).
 5. Abrí http://whoami.localhost y mirá `kubectl -n traefik get svc traefik`: el `EXTERNAL-IP` es la
    IP del nodo que asignó ServiceLB.
 6. Publicá ArgoCD por Traefik: agregá un Ingress para `argocd-server` (en `argocd.localhost`).

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: game
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/gonzalo-bertomeu-colegium/gitops-lab.git
+    targetRevision: main
+    path: workloads/game-2048
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: game
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

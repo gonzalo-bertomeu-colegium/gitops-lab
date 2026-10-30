@@ -15,3 +15,13 @@ spec:
                 name: whoami
                 port:
                   name: http
+    - host: whoami2.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port:
+                  name: custom
